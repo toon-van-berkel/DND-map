@@ -3,6 +3,8 @@
 	import { onMount, onDestroy, tick } from 'svelte';
 	import MapViewport from '$lib/components/MapViewport.svelte';
 	import { mapViewport } from '$lib/stores/mapViewportStore';
+	export const prerender = true;
+	export const trailingSlash = 'always';
 
 	let { children: page } = $props() as { children: Snippet };
 

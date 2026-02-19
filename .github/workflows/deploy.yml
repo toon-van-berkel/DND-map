@@ -5,10 +5,12 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+# GITHUB_TOKEN permissies voor Pages-deploy
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 concurrency:
   group: "pages"
@@ -21,33 +23,41 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Configure Pages / metadata
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          # Vereist een lockfile (package-lock.json) in je repo
           cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         env:
-          # For repo pages: /<repo-name>
+          # Repo Pages base: /<repo-name>
           BASE_PATH: /${{ github.event.repository.name }}
         run: npm run build
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # Moet overeenkomen met adapter-static output
           path: build
 
   deploy:
+    runs-on: ubuntu-latest
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
+
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
