@@ -29,7 +29,6 @@
 		});
 		ro.observe(viewportEl);
 
-		// initial
 		mapViewport.setViewportSize(viewportEl.clientWidth, viewportEl.clientHeight);
 
 		return () => ro.disconnect();
@@ -55,7 +54,6 @@
 
 		startClient = { x: e.clientX, y: e.clientY };
 
-		// read current pan from the store value
 		startPan = { x: $mapViewport.x, y: $mapViewport.y };
 
 		viewportEl.setPointerCapture(e.pointerId);

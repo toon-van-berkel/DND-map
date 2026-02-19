@@ -1,0 +1,69 @@
+<script lang="ts">
+    import floorTex from '$lib/assets/textures/floorTile.png';
+</script>
+
+<svg width="100%">
+	<defs>
+		<pattern id="floorTex" patternUnits="userSpaceOnUse" width="25" height="25">
+			<image
+				href={floorTex}
+				width="100"
+				height="100"
+				preserveAspectRatio="none"
+			/>
+		</pattern>
+	</defs>
+
+    <rect
+        width="100"
+        height="100"
+        fill="url(#floorTex)"
+        stroke="white"
+        stroke-width="3"
+    />
+    <rect
+        x="100"
+        y="0"
+        width="100"
+        height="100"
+        fill="url(#floorTex)"
+        stroke="white"
+        stroke-width="3"
+    />
+    <rect
+        x="200"
+        y="0"
+        width="100"
+        height="100"
+        fill="url(#floorTex)"
+        stroke="white"
+        stroke-width="3"
+    />
+    <rect
+        x="300"
+        y="0"
+        width="100"
+        height="100"
+        fill="url(#floorTex)"
+        stroke="white"
+        stroke-width="3"
+    />
+    <rect
+        x="400"
+        y="0"
+        width="100"
+        height="100"
+        fill="url(#floorTex)"
+        stroke="white"
+        stroke-width="3"
+    />
+    <rect
+        x="500"
+        y="0"
+        width="100"
+        height="100"
+        fill="url(#floorTex)"
+        stroke="white"
+        stroke-width="3"
+    />
+</svg>

@@ -3,12 +3,12 @@
 	import type { Snippet } from 'svelte';
 	import { onMount, onDestroy, tick } from 'svelte';
 	import MapViewport from '$lib/components/MapViewport.svelte';
+	import ShowHouse from '$lib/components/ShowHouse.svelte';
 	import { mapViewport } from '$lib/stores/mapViewportStore';
+	import { houseUi } from '$lib/stores/houseUiStore';
 
 	let { children: page } = $props() as { children: Snippet };
-
 	let mapHost: HTMLElement;
-
 	let mapRect = $state({ left: 0, top: 0, width: 0, height: 0 });
 	let cursor = $state({ x: 0, y: 0, inside: false });
 	let center = $state({ x: 0, y: 0 });
@@ -23,7 +23,6 @@
 	}
 
 	function localToWorld(localX: number, localY: number) {
-		// Als je coords “omgekeerd” voelen, flip dan x/y hier (zie comment onderaan)
 		return {
 			x: $mapViewport.x + localX / $mapViewport.scale,
 			y: $mapViewport.y + localY / $mapViewport.scale
@@ -65,7 +64,6 @@
 	});
 
 	$effect(() => {
-		// Center world-coords (midden van het scherm)
 		const cx = mapRect.width / 2;
 		const cy = mapRect.height / 2;
 		const w = localToWorld(cx, cy);
@@ -80,7 +78,7 @@
 			<div class="hud__block">
 				<div class="hud__title">Viewport</div>
 				<div>
-					X: {Math.round($mapViewport.x)} | Y: {Math.round($mapViewport.y)} | 
+					X: {Math.round($mapViewport.x)} | Y: {Math.round($mapViewport.y)}
 				</div>
 			</div>
 
@@ -98,13 +96,13 @@
 
 			<div class="hud__block">
 				<div class="hud__title">Zoom</div>
-				Zoom: {$mapViewport.scale.toFixed(2)}
+				<div>Zoom: {$mapViewport.scale.toFixed(2)}</div>
 			</div>
 
 			<div class="hud__block">
 				<div class="hud__title">Actions</div>
-				<button onclick={() => mapViewport.panBy(100, 0)}>Pan →</button>
-				<button onclick={() => mapViewport.panBy(-100, 0)}>Pan ←</button>
+				<button onclick={() => mapViewport.panBy(100, 0)}>Pan ←</button>
+				<button onclick={() => mapViewport.panBy(-100, 0)}>Pan →</button>
 				<button onclick={() => mapViewport.zoomBy(1.2)}>Zoom +</button>
 				<button onclick={() => mapViewport.zoomBy(1 / 1.2)}>Zoom -</button>
 				<button onclick={() => mapViewport.reset()}>Reset</button>
@@ -131,6 +129,14 @@
 			</div>
 		</div>
 	</nav>
+	<nav class="hud-Top">
+		<div class="hud__info">
+			<div class="hud__block">
+				<div class="hud__title">Information about selection</div>
+				<div>This is a quick test</div>
+			</div>
+		</div>
+	</nav>
 
 	<main
 		class="screen__map"
@@ -139,9 +145,14 @@
 		onpointermove={handlePointerMove}
 		onpointerleave={handlePointerLeave}
 	>
+
 		<MapViewport>
 			{@render page()}
 		</MapViewport>
+
+		{#if $houseUi.isShowingHouse && $houseUi.currentHouse}
+			<ShowHouse house={$houseUi.currentHouse} />
+		{/if}
 	</main>
 </div>
 
@@ -168,6 +179,16 @@
 		position: absolute;
 		top: 12px;
 		left: 12px;
+		z-index: 50;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		pointer-events: auto;
+	}
+	.hud-Top {
+		position: absolute;
+		top: 12px;
+		left: 224px;
 		right: 12px;
 		z-index: 50;
 		display: flex;
@@ -208,6 +229,20 @@
 			content: '- ';
 		}
 	}
+
+	.hud__info {
+        height: 10%;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		background: rgba(0, 0, 0, 0.55);
+		backdrop-filter: blur(6px);
+		padding: 10px 12px;
+		border-radius: 12px;
+		color: white;
+	}
+
 	a {
 		color: white;
 		text-decoration: none;
