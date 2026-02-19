@@ -1,10 +1,9 @@
 <script lang="ts">
+    import { base } from '$app/paths';
 	import type { Snippet } from 'svelte';
 	import { onMount, onDestroy, tick } from 'svelte';
 	import MapViewport from '$lib/components/MapViewport.svelte';
 	import { mapViewport } from '$lib/stores/mapViewportStore';
-	export const prerender = true;
-	export const trailingSlash = 'always';
 
 	let { children: page } = $props() as { children: Snippet };
 
@@ -117,17 +116,17 @@
 				<div class="hud__title">Overview</div>
 				<ul class="hud__list">
 					<li class="hud__list__item">
-						<a href="/">Characters</a></li>
+						<a href="{base}/">Characters</a></li>
 					<li class="hud__list__item">
-						<a href="/">Locations</a></li>
+						<a href="{base}/">Locations</a></li>
 					<li class="hud__list__item">
-						<a href="/">Buildings</a></li>
+						<a href="{base}/">Buildings</a></li>
 					<li class="hud__list__item">
-						<a href="/">Laws</a></li>
+						<a href="{base}/">Laws</a></li>
 					<li class="hud__list__item">
-						<a href="/">Weapons & items</a></li>
+						<a href="{base}/">Weapons & items</a></li>
 					<li class="hud__list__item">
-						<a href="/">Spells</a></li>
+						<a href="{base}/">Spells</a></li>
 				</ul>
 			</div>
 		</div>
